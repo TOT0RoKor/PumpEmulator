@@ -25,10 +25,30 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    step.cpp \
+    pump.cpp \
+    dataucs.cpp \
+    gaminghandler.cpp \
+    game.cpp \
+    loaducs.cpp \
+    fileio.cpp \
+    steppointer.cpp \
+    pumpmode.cpp \
+    point.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    step.h \
+    pump.h \
+    dataucs.h \
+    gaminghandler.h \
+    game.h \
+    loaducs.h \
+    fileio.h \
+    steppointer.h \
+    pumpmode.h \
+    point.h
 
 FORMS += \
         mainwindow.ui

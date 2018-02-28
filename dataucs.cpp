@@ -6,7 +6,12 @@ DataUCS::DataUCS(double bpm, UMS delay, unsigned int split, unsigned int numIncl
 
 }
 
-void DataUCS::nextRhythm(DataUCS * ref)
+void DataUCS::setNext(DataUCS * ref)
 {
     next = ref;
+}
+
+DataUCS * DataUCS::getNext(void)
+{
+    return next;
 }

@@ -1,6 +1,7 @@
 #ifndef DATAUCS_H
 #define DATAUCS_H
 
+#include "pump.h"
 
 class DataUCS
 {
@@ -16,7 +17,11 @@ class DataUCS
 
 public:
     DataUCS(double, UMS, unsigned int, unsigned int);
-    void nextRhythm(DataUCS *);
+
+    void setNext(DataUCS *);
+    DataUCS * getNext(void);
+
+    friend void Pump::toString(); // Used Debugs
 };
 
 #endif // DATAUCS_H

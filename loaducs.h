@@ -16,8 +16,8 @@ using std::string;
 class LoadUCS
 {
     /* UCS File option Delimiter */
-    static const char DELIMITER_OPTION = ':';
-    static const char DELIMITER_VALUE = '=';
+    const static char DELIMITER_OPTION = ':';
+    const static char DELIMITER_VALUE = '=';
 
     //string getValueFromOption(string);
     string getValueFromOption(string, int ucsPos=0);

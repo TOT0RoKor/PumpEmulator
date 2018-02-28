@@ -2,9 +2,11 @@
 #define POINT_H
 
 #include "loaducs.h"
-//#include "steppointer.h"
+#include "steppointer.h"
 
 class Step;
+
+//class StepPointer;
 
 class Point
 {
@@ -12,16 +14,17 @@ class Point
     int y;
     int width;
 public:
-    Point(int, int);
-    Point(int, int, int);
-    Point(const Point& ref) : x(ref.x), y(ref.y), width(ref.width){}
-//    friend Step* StepPointer::operator[](Point);
-//    friend Step* StepPointer::operator[](Point) const;
+//    Point(int, int);
+    Point(int, int, int =0);
+    Point(const Point&);
+    friend Step* StepPointer::operator[](const Point&);
+    friend Step* StepPointer::operator[](const Point&) const;
+    friend void StepPointer::setStep(const Point&, Step *);
     friend DataUCS* LoadUCS::load(int, int, Pump*);
 
 
-    int getx() const { return x; }
-    int gety() const { return y; }
+//    int getx() const { return x; }
+//    int gety() const { return y; }
 
     Point& operator++();
     Point& operator--();

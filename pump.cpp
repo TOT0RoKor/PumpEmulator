@@ -1,6 +1,8 @@
 #include "pump.h"
-#include "loaducs.h"
+#include "point.h"
+#include "step.h"
 #include <QDebug>
+#include "dataucs.h"
 using namespace std;
 
 Pump::Pump()
@@ -17,5 +19,11 @@ void Pump::toString()
             arr += step[Point(i, j)]->getDot() + '0';
         }
         qDebug() << arr.c_str();
+    }
+    DataUCS * curRhm = rhythm;
+    while(curRhm != NULL) {
+        qDebug() << "/ bpm : " << curRhm->bpm << "/ delay : " << curRhm->delay << "/ split : "
+                 << curRhm->split << "numIncl : " << curRhm->numInclusion;
+        curRhm = curRhm->next;
     }
 }

@@ -1,14 +1,15 @@
 #ifndef PUMP_H
 #define PUMP_H
 
-#include "point.h"
-#include "step.h"
+#include <iostream>
 #include "game.h"
 #include "steppointer.h"
 #include "pumpmode.h"
+#include "loaducs.h"
+
+using std::string;
 
 class DataUCS;
-class LoadUCS;
 
 class Pump : Game
 {
@@ -19,10 +20,10 @@ class Pump : Game
 public:
     Pump();
 
-    void toString(void);
+    void toString(void); // Used Debugs
 //    PumpMode getMode() { return mode; }
 
-    friend LoadUCS::LoadUCS(string name, Pump* pump);
+    friend LoadUCS::LoadUCS(string, Pump*);
     friend DataUCS * LoadUCS::load(int, int, Pump*);
 };
 

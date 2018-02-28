@@ -1,12 +1,13 @@
 #include "loaducs.h"
 #include "fileio.h"
-//#include "step.h"
+#include "step.h"
 #include <iostream>
 #include "pump.h"
 #include "dataucs.h"
 #include <QDebug>
+#include "point.h"
 
-using std::__cxx11::string;
+using std::string;
 //using std::__cxx11::string::npos;
 
 LoadUCS::LoadUCS(string name, Pump* pump) : name(name)
@@ -38,7 +39,7 @@ LoadUCS::LoadUCS(string name, Pump* pump) : name(name)
         while((nxtLine = text.find("\n", curLine+1)) != -1) {
             countLine++;
             int pos;
-            if((pos = text.find(":", curLine+1)) != -1 && pos < nxtLine)
+            if((pos = text.find(DELIMITER_OPTION, curLine+1)) != -1 && pos < nxtLine)
                 countOption++;
             curLine = nxtLine;
         }
@@ -66,40 +67,8 @@ DataUCS * LoadUCS::load(int ucsPos, int stepLine, Pump* pump)
 
     int stepPos = text.find("\n", text.find(":Split", ucsPos)+1) + 1;
 
-//    for(int i=0; i<pump->step.getHeight(); i++) {
-//        for(int j=0; j<pump->step.getWidth(); j++) {
-//            unsigned char kind;
-//            switch(text.at(stepPos)){
-//            case '.':
-//                kind = 0;
-//                break;
-//            case 'X':
-//                kind = 1;
-//                break;
-//            case 'M':
-//                kind = 2;
-//                break;
-//            case 'H':
-//                kind = 3;
-//                break;
-//            case 'W':
-//                kind = 4;
-//                break;
-//            default:
-//                throw "step description error";
-//            }
-//            pump->step[Point(i, j)] = new Step(kind);
-//            stepPos++;
-//        }
-//    }
     Point * pos = new Point(stepLine, 0, pump->mode.keys);
     while((text.at(stepPos) != ':' && pump->step.getHeight() >= pos->x + 1)) {
-//        if() {
-//            if(text.at(stepPos) == '\0') {
-//                break;
-//            }
-//            break;
-//        }
         unsigned char kind;
         switch(text.at(stepPos)){
         case '.':
@@ -133,14 +102,17 @@ DataUCS * LoadUCS::load(int ucsPos, int stepLine, Pump* pump)
 
     rhythm = new DataUCS(bpm, delay, split, numInclusion);
     if(text.at(stepPos) == ':') {
-        rhythm->nextRhythm(load(stepPos, pos->x, pump));
+        rhythm->setNext(load(stepPos, pos->x, pump));
+    }
+    else {
+        rhythm->setNext(NULL);
     }
     return rhythm;
 }
 
 string LoadUCS::getValueFromOption(string opt, int ucsPos)
 {
-    int startPos = text.find("=", text.find(":"+opt, ucsPos))+1;
+    int startPos = text.find(DELIMITER_VALUE, text.find(DELIMITER_OPTION+opt, ucsPos))+1;
     int endPos = text.find("\n" , startPos);
     return text.substr(startPos, endPos - startPos);
 }

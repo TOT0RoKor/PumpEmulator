@@ -1,4 +1,5 @@
 #include "gaminghandler.h"
+#include "pump.h"
 
 GamingHandler::GamingHandler()
 {
@@ -7,5 +8,6 @@ GamingHandler::GamingHandler()
 
 void GamingHandler::show()
 {
-    game->toString();
+    game->toString(); // Used Debugs
+
 }

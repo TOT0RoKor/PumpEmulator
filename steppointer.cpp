@@ -1,4 +1,5 @@
 #include "steppointer.h"
+#include "point.h"
 
 StepPointer::StepPointer()
 {
@@ -14,9 +15,23 @@ StepPointer::StepPointer(int height, int width)
 
 }
 
-void StepPointer::setStep(Point pos, Step * ref) {
-    if(0 <= pos.getx() && pos.getx() < height && 0 <= pos.gety() && pos.gety() < width)
-       pstep[pos.getx()][pos.gety()] = ref;
+void StepPointer::setStep(const Point& pos, Step * ref) {
+    if(0 <= pos.x && pos.x < height && 0 <= pos.y && pos.y < width)
+       pstep[pos.x][pos.y] = ref;
+}
+
+Step* StepPointer::operator[](const Point& pos){
+    if(0 <= pos.x && pos.x < height && 0 <= pos.y && pos.y < width)
+        return pstep[pos.x][pos.y];
+    else
+        return NULL;
+}
+
+Step* StepPointer::operator[](const Point& pos) const{
+    if(0 <= pos.x && pos.x < height && 0 <= pos.y && pos.y < width)
+        return pstep[pos.x][pos.y];
+    else
+        return NULL;
 }
 
 //StepPointer::StepPointer(const StepPointer& ref)
@@ -28,6 +43,15 @@ void StepPointer::setStep(Point pos, Step * ref) {
 //    }
 
 //}
+
+void StepPointer::operator=(StepPointer * ref) {
+    height = ref->height;
+    width = ref->width;
+    pstep = new Step**[this->height];
+    for(int i=0; i<this->height; i++) {
+        pstep[i] = new Step*[this->width];
+    }
+}
 
 
 StepPointer::~StepPointer()

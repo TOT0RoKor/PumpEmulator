@@ -5,8 +5,8 @@
 class PumpMode
 {
     public:
-    unsigned int speed; // speed of steps
-    unsigned int keys; // single ( 5 keys ), double ( 10 keys )
+    int speed; // speed of steps
+    int keys; // single ( 5 keys ), double ( 10 keys )
     PumpMode();
 
 };

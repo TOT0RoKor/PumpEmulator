@@ -6,10 +6,9 @@
 
 class GamingHandler
 {
-    Game * game;
+    Pump * game;
 public:
     GamingHandler();
-    ~GamingHandler();
 
     void show(void);
 };

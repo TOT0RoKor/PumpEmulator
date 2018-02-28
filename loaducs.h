@@ -1,8 +1,11 @@
 #ifndef LOADUCS_H
 #define LOADUCS_H
 
-#include "pump.h"
-#include "dataucs.h"
+//#include "pump.h"
+//#include "dataucs.h"
+class DataUCS;
+class Pump;
+
 #include <string>
 using std::string;
 
@@ -16,8 +19,10 @@ class LoadUCS
     static const char DELIMITER_OPTION = ':';
     static const char DELIMITER_VALUE = '=';
 
-    string getValueFromOption(string, int);
+    //string getValueFromOption(string);
+    string getValueFromOption(string, int ucsPos=0);
     int parseInt(string);
+    double parseDouble(string);
 
     /* UCS file */
     string name;
@@ -27,7 +32,7 @@ class LoadUCS
 
 public:
     LoadUCS(string, Pump*);
-    DataUCS * load(int, int, Pump*) const;
+    DataUCS * load(int, int, Pump*);
 };
 
 #endif // LOADUCS_H

@@ -1,14 +1,18 @@
 #include "loaducs.h"
 #include "fileio.h"
-#include "step.h"
+//#include "step.h"
 #include <iostream>
+#include "pump.h"
+#include "dataucs.h"
+#include <QDebug>
 
-using std::string::npos;
+using std::__cxx11::string;
+//using std::__cxx11::string::npos;
 
 LoadUCS::LoadUCS(string name, Pump* pump) : name(name)
 {
     try {
-        FileIO::read(name, &text); // Read UCS File Data
+        FileIO::readUcs(name, &text); // Read UCS File Data
 
         // mode of step
         string mode = getValueFromOption("Mode");
@@ -17,33 +21,33 @@ LoadUCS::LoadUCS(string name, Pump* pump) : name(name)
                         "=", text.find(":Mode")
                         )+1, 6
                     );*/
-        if(mode.compare(string("Single"))) {
+        if(!mode.compare(string("Single"))) {
             pump->mode.keys = 5;
         }
-        else if(mode.compare(string("Double"))) {
+        else if(!mode.compare(string("Double"))) {
             pump->mode.keys = 10;
         }
         else throw "Mode error";
 
 
         // counting Line and Option of UCS file
-        countLine = 0;
-        countOption = 0;
+        int countLine = 0;
+        int countOption = 0;
         int curLine = -1;
         int nxtLine;
-        while((nxtLine = text.find("\n", curLine+1)) != npos) {
+        while((nxtLine = text.find("\n", curLine+1)) != -1) {
             countLine++;
             int pos;
-            if((pos = text.find(":", curLine+1)) != npos && pos < nxtLine)
+            if((pos = text.find(":", curLine+1)) != -1 && pos < nxtLine)
                 countOption++;
             curLine = nxtLine;
         }
 
         // pump step array allocation
-        pump->step = new StepPointer(countLine - countOpiton, pump->mode.keys);
+        pump->step = new StepPointer(countLine - countOption, pump->mode.keys);
 
     } catch (string expn) {
-        cout << "LoadUCS - " << name << " : " << expn << endl;
+        qDebug() << "LoadUCS - " << name.c_str() << " : " << expn.c_str();
     }
 }
 
@@ -52,15 +56,15 @@ LoadUCS::LoadUCS(string name, Pump* pump) : name(name)
  * stepLine : next position of reference pump->step
  * stepPos : at work to read position about steps of current rhythm
  */
-DataUCS * LoadUCS::load(int ucsPos, int stepLine, Pump* pump) const
+DataUCS * LoadUCS::load(int ucsPos, int stepLine, Pump* pump)
 {
     DataUCS * rhythm;
 
-    int bpm = parseInt(getValueFromOption("BPM", ucsPos));
-    int delay = parseInt(getValueFromOption("Delay", ucsPos));
+    double bpm = parseDouble(getValueFromOption("BPM", ucsPos));
+    double delay = parseDouble(getValueFromOption("Delay", ucsPos));
     int split = parseInt(getValueFromOption("Split", ucsPos));
 
-    int stepPos = text.find("\n", text.find(":split", ucsPos)+1) + 1;
+    int stepPos = text.find("\n", text.find(":Split", ucsPos)+1) + 1;
 
 //    for(int i=0; i<pump->step.getHeight(); i++) {
 //        for(int j=0; j<pump->step.getWidth(); j++) {
@@ -88,8 +92,14 @@ DataUCS * LoadUCS::load(int ucsPos, int stepLine, Pump* pump) const
 //            stepPos++;
 //        }
 //    }
-    Point pos = new Point(stepLine, 0, pump->mode.keys);
-    while(stepPos != ':' && stepPos != '\0') {
+    Point * pos = new Point(stepLine, 0, pump->mode.keys);
+    while((text.at(stepPos) != ':' && pump->step.getHeight() >= pos->x + 1)) {
+//        if() {
+//            if(text.at(stepPos) == '\0') {
+//                break;
+//            }
+//            break;
+//        }
         unsigned char kind;
         switch(text.at(stepPos)){
         case '.':
@@ -113,36 +123,59 @@ DataUCS * LoadUCS::load(int ucsPos, int stepLine, Pump* pump) const
         default:
             throw "step description error";
         }
-        pump->step[pos] = new Step(kind);
-        pos++;
+        pump->step.setStep(*pos, new Step(kind));
+        (*pos)++;
         stepPos++;
+
     }
 
-    int numInclusion = pos.x - stepLine;
+    int numInclusion = pos->x - stepLine;
 
     rhythm = new DataUCS(bpm, delay, split, numInclusion);
-    if(stepPos == ':') {
-        rhythm->nextRhythm() = load(stepPos, pos.x, pump);
+    if(text.at(stepPos) == ':') {
+        rhythm->nextRhythm(load(stepPos, pos->x, pump));
     }
     return rhythm;
 }
 
 string LoadUCS::getValueFromOption(string opt, int ucsPos)
 {
-    int startPos;
-    int endPos;
-    return text.assign(
-                (startPos = text.find(
-                    "=", text.find(":"+opt, ucsPos)
-                    )+1), (endPos = text.find("\n" , startPos)) - startPos
-                );
+    int startPos = text.find("=", text.find(":"+opt, ucsPos))+1;
+    int endPos = text.find("\n" , startPos);
+    return text.substr(startPos, endPos - startPos);
 }
 
 int LoadUCS::parseInt(string str)
 {
     int result=0;
-    for(int i; i<str.length(); i++) {
+    for(int i=0; i<str.length(); i++) {
         result *= 10;
         result += str.at(i) - '0';
     }
+    return result;
+}
+double LoadUCS::parseDouble(string str)
+{
+    bool upperDot = true;
+    double result=0;
+    int k=0;
+    for(int i=0; i<str.length(); i++) {
+        if(str.at(i) == '.') {
+            upperDot = false;
+            continue;
+        }
+        if(upperDot) {
+            result *= 10;
+            result += str.at(i) - '0';
+        }
+        else {
+            k++;
+            double temp = 1;
+            for(int j=0; j<k; j++) {
+                temp /= 10;
+            }
+            result += temp * (str.at(i) - '0');
+        }
+    }
+    return result;
 }

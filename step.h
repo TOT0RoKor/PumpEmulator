@@ -14,7 +14,7 @@ class Step
      */
 public:
     Step(const unsigned char inst); // step initialize
-    explicit Step(const Step& ref);
+    //explicit Step(const Step& ref);
 
     unsigned char getDot(void);
     bool checkNZ(void) const; // check step data for not zero

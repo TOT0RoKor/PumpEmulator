@@ -8,10 +8,11 @@ using std::size_t;
 
 class FileIO
 {
-    File * in;
 public:
+    static std::FILE * in;
+
     FileIO();
-    static size_t read(string&, string*) throw (string); // file input
+    static size_t readUcs(string&, string*) throw (string); // file input
 };
 
 #endif // FILEIO_H

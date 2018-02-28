@@ -1,6 +1,6 @@
 #include "pump.h"
 #include "loaducs.h"
-#include <iostream>
+#include <QDebug>
 using namespace std;
 
 Pump::Pump()
@@ -8,17 +8,14 @@ Pump::Pump()
     rhythm = LoadUCS("CS051.ucs", this).load(0, 0, this);
 }
 
-Pump::~Pump()
-{
-
-}
 
 void Pump::toString()
 {
     for(int i=0; i<step.getHeight(); i++){
+        string arr="";
         for(int j=0; j<step.getWidth(); j++){
-            cout << step[Point(i, j)]->getDot();
+            arr += step[Point(i, j)]->getDot() + '0';
         }
-        cout << endl;
+        qDebug() << arr.c_str();
     }
 }

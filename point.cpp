@@ -1,6 +1,11 @@
 #include "point.h"
 
-Point::Point(int x, int y, int width=0) : x(x), y(y), width(width)
+Point::Point(int x, int y) : x(x), y(y), width(0)
+{
+
+}
+
+Point::Point(int x, int y, int width) : x(x), y(y), width(width)
 {
 
 }

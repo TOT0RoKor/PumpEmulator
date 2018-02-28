@@ -5,8 +5,8 @@
 class DataUCS
 {
     /* UCS File Datas */
-    typedef unsigned int UMS; // millisecond
-    unsigned int bpm; // beat per minute
+    typedef double UMS; // millisecond
+    double bpm; // beat per minute
     UMS delay; // delay
     unsigned int split; // 1 beat per split
 
@@ -15,8 +15,8 @@ class DataUCS
     DataUCS * next; // UCS data about information of next rhythm
 
 public:
-    DataUCS(unsigned int, UMS, unsigned int, unsigned int);
-    DataUCS * nextRhythm(void);
+    DataUCS(double, UMS, unsigned int, unsigned int);
+    void nextRhythm(DataUCS *);
 };
 
 #endif // DATAUCS_H

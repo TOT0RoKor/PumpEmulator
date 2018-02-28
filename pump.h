@@ -4,9 +4,11 @@
 #include "point.h"
 #include "step.h"
 #include "game.h"
-#include "dataucs.h"
 #include "steppointer.h"
 #include "pumpmode.h"
+
+class DataUCS;
+class LoadUCS;
 
 class Pump : Game
 {
@@ -17,9 +19,11 @@ class Pump : Game
 public:
     Pump();
 
-    ~Pump();
-
     void toString(void);
+//    PumpMode getMode() { return mode; }
+
+    friend LoadUCS::LoadUCS(string name, Pump* pump);
+    friend DataUCS * LoadUCS::load(int, int, Pump*);
 };
 
 #endif // PUMP_H

@@ -1,35 +1,42 @@
 #include "steppointer.h"
 
-StepPointer::StepPointer(const unsigned int height, const unsigned int width)
+StepPointer::StepPointer()
+{
+
+}
+StepPointer::StepPointer(int height, int width)
     : height(height), width(width)
 {
-    step = new Step**[this->height];
+    pstep = new Step**[this->height];
     for(int i=0; i<this->height; i++) {
-        step[i] = new Step*[this->width];
+        pstep[i] = new Step*[this->width];
     }
 
 }
+
+void StepPointer::setStep(Point pos, Step * ref) {
+    if(0 <= pos.getx() && pos.getx() < height && 0 <= pos.gety() && pos.gety() < width)
+       pstep[pos.getx()][pos.gety()] = ref;
+}
+
+//StepPointer::StepPointer(const StepPointer& ref)
+//    : height(ref.height), width(ref.width)
+//{
+//    pstep = new Step**[this->height];
+//    for(int i=0; i<this->height; i++) {
+//        pstep[i] = new Step*[this->width];
+//    }
+
+//}
+
 
 StepPointer::~StepPointer()
 {
     for(int i=0; i<height; i++) {
         for(int j=0; j<width; j++) {
-            delete step[i][j];
+            delete pstep[i][j];
         }
-        delete[] step[i];
+        delete[] pstep[i];
     }
-    delete[] step;
-}
-
-
-Step* StepPointer::operator[](const Point& ref)
-{
-    if(0 <= ref.x && ref.x < height && 0 <= ref.y && ref.y < width)
-        return step[ref.x][ref.y];
-}
-
-Step* StepPointer::operator[](const Point& ref) const
-{
-    if(0 <= ref.x && ref.x < height && 0 <= ref.y && ref.y < width)
-        return step[ref.x][ref.y];
+    delete[] pstep;
 }

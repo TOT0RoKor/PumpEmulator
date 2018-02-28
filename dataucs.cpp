@@ -1,12 +1,12 @@
 #include "dataucs.h"
 
-DataUCS::DataUCS(unsigned int bpm, UMS delay, unsigned int split, unsigned int numInclusion)
+DataUCS::DataUCS(double bpm, UMS delay, unsigned int split, unsigned int numInclusion)
     : bpm(bpm), delay(delay), split(split), numInclusion(numInclusion)
 {
 
 }
 
-DataUCS * DataUCS::nextRhythm(void)
+void DataUCS::nextRhythm(DataUCS * ref)
 {
-    return next;
+    next = ref;
 }

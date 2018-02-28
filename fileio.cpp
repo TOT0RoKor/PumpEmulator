@@ -1,21 +1,23 @@
 #include "fileio.h"
 
+std::FILE * FileIO::in = NULL;
+
 FileIO::FileIO()
 {
 
 }
 
-static size_t FileIO::read(string& name, string * text)
+size_t FileIO::readUcs(string& name, string * text) throw(string)
 {
 
-    if(!(in = fopen(name, "r"))) throw "open error";
+    if(!(in = std::fopen(name.c_str(), "r"))) throw "open error";
 
     char buf[128];
-    while(std::fgets(buf, 127, out) != EOF) {
+    while(std::fgets(buf, 127, in) != NULL) {
         *text += buf;
     }
 
-    if(fclose(out)) throw "close error";
+    if(fclose(in)) throw "close error";
 
     return text->length();
 }

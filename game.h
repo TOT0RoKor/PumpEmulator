@@ -8,8 +8,7 @@
 class Game
 {
 public:
-    virtual Game();
-    virtual ~Game();
+    Game();
     virtual void toString(void) = 0;
 };
 

@@ -4,4 +4,4 @@ Qt based rhythm game emulator.
 Imitation of Pump It Up
 
 # Developer info
-email : faultydevil24@gmail.com
+email : tot0roprog@gmail.com
